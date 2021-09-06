@@ -20,10 +20,6 @@ public class DemoappApplication {
 
 		System.out.println(context.getBeanDefinitionCount());
 
-
-
-
-
 	}
 
 }
