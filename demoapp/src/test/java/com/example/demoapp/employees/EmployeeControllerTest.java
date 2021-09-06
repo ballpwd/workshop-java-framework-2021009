@@ -21,7 +21,7 @@ class EmployeeControllerTest {
 
         assertEquals(2, results.length);
         assertEquals(1,results[0].getId());
-        assertEquals("puwadech 2", results[0].getName());
+        assertEquals("puwadech", results[0].getName());
     }
 
 }
