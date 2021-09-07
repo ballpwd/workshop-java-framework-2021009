@@ -42,13 +42,12 @@ public class EmployeeControllerServiceTest {
     public void case02(){
         int id = 100 ;
 
-        when(employeeRepository.findById(id)).thenThrow(new EmployeeNotFoundException("Employee not found id=" + id)) ;
+        when(employeeRepository.findById(id)).thenReturn(Optional.empty());
 
         ErrorResponse result = restTemplate.getForObject("/employees/"+id, ErrorResponse.class);
 
         assertEquals(404,result.getCode()) ;
         assertEquals("Employee not found id="+id, result.getDetail());
-
 
     }
 }
