@@ -9,8 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,16 +37,34 @@ public class EmployeeServiceUnitTest {
 
     @Test
     public void employee_not_found_case() {
+        // Arrange
+        when(employeeRepository.findById(1)).thenReturn(Optional.empty());
+        // Act
+        EmployeeService employeeService = new EmployeeService(employeeRepository);
+        try {
+            employeeService.getById(1);
+            fail();
+        } catch (EmployeeNotFoundException e) {
+            // Pass
+            if(!"Employee not found id=1".equals(e.getMessage())) {
+                fail("Message fail with=" + e.getMessage());
+            }
+        }
+    }
+
+    @Test
+    public void employee_not_found_case_with_junit5() {
         int id = 100 ;
 
         when(employeeRepository.findById(id)).thenReturn(Optional.empty());
 
         EmployeeService employeeService = new EmployeeService(employeeRepository);
 
-        assertThrows(EmployeeNotFoundException.class ,() -> {
+        Exception exception = assertThrows(EmployeeNotFoundException.class ,() -> {
             EmployeeResponse result = employeeService.getById(id);
         });
 
+        assertEquals("Employee not found id="+id,exception.getMessage());
     }
 
 }
