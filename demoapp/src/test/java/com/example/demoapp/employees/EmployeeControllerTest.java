@@ -10,28 +10,33 @@ import static org.springframework.boot.test.context.SpringBootTest.*;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class EmployeeControllerTest {
-
     @Autowired
-    private TestRestTemplate restTemplate ;
+    private TestRestTemplate restTemplate;
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     @Test
-    void listEmployee() {
+    public void getEmployeeById() {
 
-        EmployeeResponse[] results = restTemplate.getForObject("/employees", EmployeeResponse[].class);
+        int id = 1;
+        Employee employee100 = new Employee();
+        employee100.setName("puwadech");
+        employeeRepository.save(employee100);
 
-        assertEquals(2, results.length);
-        assertEquals(1,results[0].getId());
-        assertEquals("puwadech", results[0].getName());
+        EmployeeResponse result = restTemplate.getForObject("/employees/" + id, EmployeeResponse.class);
+
+        assertEquals(id, result.getId());
+        assertEquals("puwadech", result.getName());
     }
 
     @Test
-    void getEmployeeById() {
-
-        int id =  2 ;
-
-        EmployeeResponse result = restTemplate.getForObject("/employees/"+id , EmployeeResponse.class);
-
-        assertEquals(id,result.getId());
-        assertEquals("puwadech", result.getName());
+    public void listEmployee() {
+        // Act
+        EmployeeResponse[] results
+                = restTemplate.getForObject("/employees", EmployeeResponse[].class);
+        // Assert
+        assertEquals(2, results.length);
+        assertEquals(1, results[0].getId());
+        assertEquals("puwadech", results[0].getName());
     }
 }
